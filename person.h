@@ -178,9 +178,24 @@ class List {
 private:
 	Node* head;
 	Node* tail;
+	int size;
 
 public:
-	List() : head(nullptr), tail(nullptr) {}
+	List() : head(nullptr), tail(nullptr), size(0) {}
+
+	// Получить Person по индексу
+	Person* getByIndex(int index) {
+		Node* current = head;
+		int currentIndex = 1;
+		while (current && currentIndex < index) {
+			current = current->next;
+			currentIndex++;
+		}
+		if (current && currentIndex == index) {
+			return current->data;
+		}
+		return nullptr;
+	}
 
 	// Добавление человека
 	void append(Person* p) {
@@ -200,6 +215,7 @@ public:
 					newNode->prev = tail;
 					tail = newNode;
 				}
+				size++;
 			}
 			else {
 				cerr << "Error in date" << endl;
@@ -280,5 +296,60 @@ public:
 		}
 
 		file.close();
+	}
+
+	// Сравнение двух людей
+	void compare(List& list) {
+		printList();
+		int i1, i2;
+		cout << "Write 2 index of people to compare: ";
+		cin >> i1 >> i2; cout << endl;
+		cout << "SIZE IS " << size << endl;
+		if (size > i1 and size > i2) {
+			Person* person1 = getByIndex(i1);
+			Person* person2 = getByIndex(i2);
+	
+			// Surname
+			if (person1->GetSec_Name() > person2->GetSec_Name()) { cout << "Surname: + , "; }
+			else if (person1->GetSec_Name() < person2->GetSec_Name()) { cout << "Surname: - , "; }
+			else if (person1->GetSec_Name() == person2->GetSec_Name()) { cout << "Surname: 0 , "; }
+	
+			// Name
+			if (person1->GetName() > person2->GetName()) { cout << "Name: + , "; }
+			else if (person1->GetName() == person2->GetName()) { cout << "Name: 0 , "; }
+			else if (person1->GetName() < person2->GetName()) { cout << "Name: - , "; }
+	
+			// Dad name
+			if (person1->GetDad_Name() > person2->GetDad_Name()) { cout << "Otchestvo: + , "; }
+			else if (person1->GetDad_Name() == person2->GetDad_Name()) { cout << "Otchestvo: 0 , "; }
+			else if (person1->GetDad_Name() < person2->GetDad_Name()) { cout << "Otchestvo: - , "; }
+	
+			//Date
+			int date_1 = person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay();
+			int date_2 = person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay();
+			if (date_1 < date_2) { cout << "Date: + , "; }
+			else if (date_1 == date_2) { cout << "Date: 0 , "; }
+			else if (date_1 > date_2) { cout << "Date: - , "; }
+	
+			//Phone
+			if (person1->GetPhone() > person2->GetPhone()) { cout << "Phone: +"; }
+			else if (person1->GetPhone() == person2->GetPhone()) { cout << "Phone: 0"; }
+			else if (person1->GetPhone() < person2->GetPhone()) { cout << "Phone: -"; }
+			cout << endl;
+		}
+		else {
+			cerr << "Wrong indexes" << endl;
+		}
+	}
+
+	// Деструктор
+	~List() {
+		Node* current = head;
+		while (current) {
+			Node* next = current->next;
+			delete current->data;
+			delete current;
+			current = next;
+		}
 	}
 };

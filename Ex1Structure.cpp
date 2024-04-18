@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <list>
 
 #include "person.h"
 #include "headex1.h"
@@ -52,7 +53,7 @@ int main() {
 			list.addFromFile(adress);
 		}
 		else if (flag == 3) {
-			//compare(data_base);
+			list.compare(list);
 		}
 		else if (flag == 4) {
 			list.printList();
