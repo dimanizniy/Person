@@ -17,18 +17,18 @@ private:
 	int day, month, year;
 public:
 
-	// Объявление человека
+	// Initialize the person
 	Person(const std::string& middle, const std::string& first, const std::string& last, const std::string& dob, const std::string& number) :
 		sec_name(middle), name(first), dad_name(last), date(dob), phone(number) {};
 
-	// Добавление даты в раздельном формате
+	// Adding a date in a separate format
 	void set_date(std::vector <int> p1) {
 		day = p1[0];
 		month = p1[1];
 		year = p1[2];
 	}
 
-	// Функции получения информации
+	// Functions for obtaining information
 	std::string GetName() const {
 		return name;
 	}
@@ -54,7 +54,7 @@ public:
 		return year;
 	}
 
-	// Проверка на иные символы при вводе
+	// Checking for other characters when entering
 	std::string check_input() {
 		std::string result = "";
 		bool f = true;
@@ -101,7 +101,7 @@ public:
 		}
 	}
 
-	// Разбиение даты str на vector: day, month, year
+	// Splitting date str into vector: day, month, year
 	std::vector <int> add_date() {
 		try {
 			std::vector <int> dmy;
@@ -132,7 +132,7 @@ public:
 		}
 	}
 
-	// Проверка, что дата не будущая
+	// Checking that the date is not future
 	bool isDateBeforeNow(int day, int month, int year) {
 		time_t now = time(nullptr);
 		tm* localTime = localtime(&now);
@@ -146,7 +146,7 @@ public:
 		return ((year * 10000 + month * 100 + day) - (currentDate.tm_year * 10000 + currentDate.tm_mon * 100 + currentDate.tm_mday)) <= 0;
 	}
 
-	// Проверка на кол-во дней в месяце
+	// Checking the number of days in a month
 	bool CheckDate(int day, int month, int year)
 	{
 		if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
@@ -185,7 +185,7 @@ public:
 		}
 	}
 
-	// Проверка даты существование
+	// Existence date check
 	bool right_date() {
 		bool f = isDateBeforeNow(day, month, year);
 		bool f1 = CheckDate(day, month, year);
@@ -227,7 +227,7 @@ private:
 public:
 	List() : head(nullptr), tail(nullptr), size(0) {}
 
-	// Получить Person по индексу
+	// Get Person by index
 	Person* getByIndex(int index) {
 		Node* current = head;
 		int currentIndex = 1;
@@ -241,7 +241,7 @@ public:
 		return nullptr;
 	}
 
-	// Добавление человека
+	// Adding a person
 	void append(Person* p) {
 
 		std::string res = p->check_input();
@@ -279,7 +279,7 @@ public:
 		}
 	}
 
-	// Удаление человека
+	// Removing a person
 	void remove(Person* p) {
 		Node* current = head;
 		while (current) {
@@ -306,7 +306,7 @@ public:
 		}
 	}
 
-	// Вывод листа
+	// List Output
 	void printList() {
 		Node* current = head;
 		int index = 1;
@@ -320,7 +320,7 @@ public:
 		}
 	}
 
-	// Добавление всех Person из файла
+	// Adding all Persons from a file
 	void addFromFile(const std::string& filename) {
 		std::string name, sec_name, dad_name, date, phone;
 		std::ifstream file(filename);
@@ -351,7 +351,7 @@ public:
 		file.close();
 	}
 
-	// Сравнение двух Person
+	// Comparison of two Persons
 	void compare(List& list) {
 		printList();
 		int i1, i2;
@@ -394,7 +394,7 @@ public:
 		}
 	}
 
-	// Проверка одного Person 
+	// Checking one Person
 	void check_person() {
 		printList();
 		int i;
@@ -453,7 +453,7 @@ public:
 		}
 	}
 
-	// Кол-во дней до др одного Person
+	// Number of days until birthday one Person
 	void birthday() {
 		printList();
 		int i = 0;
@@ -486,20 +486,20 @@ public:
 		}
 	}
 
-	// Удаление List
+	// Clearing List
 	void clearList() {
 		Node* current = head;
 		while (current) {
 			Node* next = current->next;
-			delete current->data; // Удаляем объект Person, хранящийся в узле
-			delete current; // Удаляем сам узел
+			delete current->data; // Deleting the Person object stored in the node
+			delete current; // Delete the node itself
 			current = next;
 		}
-		head = tail = nullptr; // Указатели головы и хвоста указывают на nullptr, т.е. список пуст
-		size = 0; // Обнуляем размер списка
+		head = tail = nullptr; // The head and tail pointers point to nullptr, i.e. the list is empty
+		size = 0; // Resetting the list size to zero
 	}
 
-	// Эскпорт List в файл "output.txt"
+	// Export List to file "output.txt"
 	void writeToFile(const std::string& filename) {
 		std::ofstream outFile(filename);
 		if (!outFile.is_open()) {
@@ -520,15 +520,15 @@ public:
 		outFile.close();
 	}
 
-	// Проверка по фамилии
+	// Check by last name
 	bool comparePersonsByLastName(Person* person1, Person* person2) {
 		return person1->GetSec_Name() > person2->GetSec_Name();
 	}
 
-	// Сортировка List пузырьком
+	// List bubble sort
 	void bubbleSort() {
 		if (!head || !head->next) {
-			// Если список пустой или содержит только один элемент, то он уже отсортирован
+			// If the list is empty or contains only one element, then it is already sorted
 			return;
 		}
 
@@ -539,7 +539,7 @@ public:
 			Node* current = head;
 			while (current->next != last) {
 				if (comparePersonsByLastName(current->data, current->next->data)) {
-					// Если текущий элемент больше следующего, меняем их местами
+					// If the current element is larger than the next one, swap them
 					Person* temp = current->data;
 					current->data = current->next->data;
 					current->next->data = temp;
@@ -551,7 +551,7 @@ public:
 		} while (swapped);
 	}
 
-	// Деструктор
+	// Destructor
 	~List() {
 		Node* current = head;
 		while (current) {
