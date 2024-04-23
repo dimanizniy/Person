@@ -3,13 +3,10 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include <list>
 
 #include "person.h"
-#include "headex1.h"
 #include <Windows.h>
 
-using namespace std;
 
 int main() {
 	SetConsoleOutputCP(CP_UTF8);
@@ -17,77 +14,64 @@ int main() {
 
 	List list;
 
-	cout << "1 - Adding from keyboard" << endl;
-	cout << "2 - Adding from file" << endl;
-	cout << "3 - Compare two people" << endl;
-	cout << "4 - Output" << endl;
-	cout << "5 - Delete person" << endl;
-	cout << "6 - Copy person" << endl;
-	cout << "7 - Check one person" << endl;
-	cout << "8 - Days until birthday" << endl;
-	cout << "9 - Export the database to the file" << endl;
-	cout << "10 - Sort the database" << endl;
-	cout << "-1 - Clear the database" << endl;
-	cout << "0 - Exit" << endl;
-	int flag = -10;
-	while (flag != 0) {
-		cout << "Choose action: ";
-		cin >> flag; cout << endl;
-		if (flag == 0) {
-			cout << "The end...";
+	std::cout << "1 - Adding from keyboard" << std::endl;
+	std::cout << "2 - Adding from file" << std::endl;
+	std::cout << "3 - Compare two people" << std::endl;
+	std::cout << "4 - Output" << std::endl;
+	std::cout << "5 - Check one person" << std::endl;
+	std::cout << "6 - Days until birthday" << std::endl;
+	std::cout << "7 - Export the database to the file" << std::endl;
+	std::cout << "8 - Sort the database" << std::endl;
+	std::cout << "-1 - Clear the database" << std::endl;
+	std::cout << "0 - Exit" << std::endl;
+	std::string flag = "10";
+	while (flag != "0") {
+		std::cout << "Choose action: ";
+		std::cin >> flag; std::cout << std::endl;
+		if (flag == "0") {
+			std::cout << "The end...";
 			break;
 		}
-		else if (flag == 1) {
-			string name, sec_name, dad_name, date, phone;
-			cout << "Write a FIO, date and phone: ";
-			cin >> sec_name >> name >> dad_name >> date >> phone; cout << endl;
+		else if (flag == "1") {
+			std::string name, sec_name, dad_name, date, phone;
+			std::cout << "Write a FIO, date and phone: ";
+			std::cin >> sec_name >> name >> dad_name >> date >> phone; std::cout << std::endl;
 			Person* p = new Person(sec_name, name, dad_name, date, phone);
 			list.append(p);
 
 		}
-		else if (flag == 2) 
+		else if (flag == "2")
 		{
-			string adress;
-			cout << "Write an adress to file: ";
-			cin >> adress; cout << endl;
+			std::string adress;
+			std::cout << "Write an adress to file: ";
+			std::cin >> adress; std::cout << std::endl;
 			list.addFromFile(adress);
 		}
-		else if (flag == 3) {
+		else if (flag == "3") {
 			list.compare(list);
 		}
-		else if (flag == 4) {
+		else if (flag == "4") {
 			list.printList();
 		}
-		else if (flag == 5) {
-			//eliminate(data_base);
+		else if (flag == "5") {
+			list.check_person();
 		}
-		else if (flag == 6) {
-			//copy(data_base);
+		else if (flag == "6") {
+			list.birthday();
 		}
-		else if (flag == 7) {
-			//bool f = check(data_base);
-			//if (f) {
-			//	cout << "Equally" << endl;
-			//}
-			//else {
-			//	cout << "Not equally" << endl;
-			//}
+		else if (flag == "7") {
+			list.writeToFile("output.txt");
+			std::cout << "Success" << std::endl;
 		}
-		else if (flag == 8) {
-			//birthday(data_base);
+		else if (flag == "8") {
+			list.bubbleSort();
 		}
-		else if (flag == 9) {
-			//write(data_base);
-		}
-		else if (flag == 10) {
-			//sortVector(data_base);
-		}
-		else if (flag == -1) {
-			//data_base.clear();
-			//cout << "Database was cleared" << endl;
+		else if (flag == "-1") {
+			list.clearList();
+			std::cout << "Database is cleared" << std::endl;
 		}
 	}
-	if (not flag) {
+	if (flag == "0") {
 		exit;
 	}
 }

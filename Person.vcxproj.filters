@@ -18,14 +18,8 @@
     <ClCompile Include="Ex1Structure.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="funcex1.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headex1.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="person.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
