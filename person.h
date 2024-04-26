@@ -235,6 +235,7 @@ public:
 		}
 		if (std::cin.fail()) {
 			std::cin.clear();
+			std::cin.ignore();
 			return "er";
 		}
 		else {
@@ -258,7 +259,6 @@ public:
 
 	// Adding a person
 	void append(Person* p) {
-
 		std::string res = p->check_input();
 		if (res == "0") {
 			std::vector <int> full_date = p->add_date();
@@ -287,7 +287,6 @@ public:
 			else {
 				std::cerr << "Error in date" << std::endl;
 			}
-
 		}
 		else {
 			std::cout << res << std::endl;
