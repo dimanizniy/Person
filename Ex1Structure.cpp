@@ -61,10 +61,11 @@ int main() {
 		}
 		else if (flag == "7") {
 			list.writeToFile("output.txt");
-			std::cout << "Success" << std::endl;
+			std::cout << "Exported!" << std::endl;
 		}
 		else if (flag == "8") {
 			list.bubbleSort();
+			std::cout << "Sorted!" << std::endl;
 		}
 		else if (flag == "-1") {
 			list.clearList();

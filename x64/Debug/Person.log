@@ -7,6 +7,6 @@ C:\Folder with folders\Visual\Person\Person\person.h(1,1): warning C4005: _CRT_S
 C:\Folder with folders\Visual\Person\Person\person.h(130,34): warning C4101: e: неиспользованная локальная переменная
   (компиляция исходного файла "Ex1Structure.cpp")
   
-C:\Folder with folders\Visual\Person\Person\Ex1Structure.cpp(75,3): warning C4551: в вызове функции отсутствует список аргументов
+C:\Folder with folders\Visual\Person\Person\Ex1Structure.cpp(76,3): warning C4551: в вызове функции отсутствует список аргументов
 C:\Folder with folders\Visual\Person\Person\person.h(186,1): warning C4715: Person::CheckDate: значение возвращается не при всех путях выполнения
   Person.vcxproj -> C:\Folder with folders\Visual\Person\x64\Debug\Person.exe

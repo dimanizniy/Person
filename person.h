@@ -227,6 +227,21 @@ private:
 public:
 	List() : head(nullptr), tail(nullptr), size(0) {}
 
+	// Checking an integer
+	std::string true_int() {
+		int i;
+		if ((std::cin >> i).good()) {
+			return std::to_string(i);
+		}
+		if (std::cin.fail()) {
+			std::cin.clear();
+			return "er";
+		}
+		else {
+			return "er";
+		}
+	}
+
 	// Get Person by index
 	Person* getByIndex(int index) {
 		Node* current = head;
@@ -252,11 +267,11 @@ public:
 				bool f = p->right_date();
 				if (f) {
 					Node* newNode = new Node(p);
-					if (!head) 
+					if (!head)
 					{
 						head = tail = newNode;
 					}
-					else 
+					else
 					{
 						tail->next = newNode;
 						newNode->prev = tail;
@@ -264,7 +279,7 @@ public:
 					}
 					size++;
 				}
-				else 
+				else
 				{
 					std::cerr << "Error in date" << std::endl;
 				}
@@ -272,7 +287,7 @@ public:
 			else {
 				std::cerr << "Error in date" << std::endl;
 			}
-			
+
 		}
 		else {
 			std::cout << res << std::endl;
@@ -330,7 +345,7 @@ public:
 		}
 
 		while (file >> sec_name >> name >> dad_name >> date >> phone) {
-			Person* p = new Person(sec_name, name, dad_name, date, phone); 
+			Person* p = new Person(sec_name, name, dad_name, date, phone);
 			std::string res = p->check_input();
 			if (res == "0") {
 				std::vector <int> full_date = p->add_date();
@@ -354,40 +369,50 @@ public:
 	// Comparison of two Persons
 	void compare(List& list) {
 		printList();
-		int i1, i2;
 		std::cout << "Write 2 index of people to compare: ";
-		std::cin >> i1 >> i2; std::cout << std::endl;
-		if (size >= i1 and size >= i2) {
-			Person* person1 = getByIndex(i1);
-			Person* person2 = getByIndex(i2);
-	
-			// Surname
-			if (person1->GetSec_Name() > person2->GetSec_Name()) { std::cout << "Surname: + , "; }
-			else if (person1->GetSec_Name() < person2->GetSec_Name()) { std::cout << "Surname: - , "; }
-			else if (person1->GetSec_Name() == person2->GetSec_Name()) { std::cout << "Surname: 0 , "; }
-	
-			// Name
-			if (person1->GetName() > person2->GetName()) { std::cout << "Name: + , "; }
-			else if (person1->GetName() == person2->GetName()) { std::cout << "Name: 0 , "; }
-			else if (person1->GetName() < person2->GetName()) { std::cout << "Name: - , "; }
-	
-			// Dad name
-			if (person1->GetDad_Name() > person2->GetDad_Name()) { std::cout << "Otchestvo: + , "; }
-			else if (person1->GetDad_Name() == person2->GetDad_Name()) { std::cout << "Otchestvo: 0 , "; }
-			else if (person1->GetDad_Name() < person2->GetDad_Name()) { std::cout << "Otchestvo: - , "; }
-	
-			//Date
-			int date_1 = person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay();
-			int date_2 = person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay();
-			if (date_1 < date_2) { std::cout << "Date: + , "; }
-			else if (date_1 == date_2) { std::cout << "Date: 0 , "; }
-			else if (date_1 > date_2) { std::cout << "Date: - , "; }
-	
-			//Phone
-			if (person1->GetPhone() > person2->GetPhone()) { std::cout << "Phone: +"; }
-			else if (person1->GetPhone() == person2->GetPhone()) { std::cout << "Phone: 0"; }
-			else if (person1->GetPhone() < person2->GetPhone()) { std::cout << "Phone: -"; }
-			std::cout << std::endl;
+		std::string m = true_int(); std::string n = true_int(); std::cout << std::endl;
+		if (m != "er" and n != "er") {
+			int i1 = std::stoi(m);
+			int i2 = std::stoi(n);
+			if (size >= i1 and size >= i2) {
+				Person* person1 = getByIndex(i1);
+				Person* person2 = getByIndex(i2);
+				if (person1 != nullptr and person2 != nullptr) {
+					// Surname
+					if (person1->GetSec_Name() > person2->GetSec_Name()) { std::cout << "Surname: + , "; }
+					else if (person1->GetSec_Name() < person2->GetSec_Name()) { std::cout << "Surname: - , "; }
+					else if (person1->GetSec_Name() == person2->GetSec_Name()) { std::cout << "Surname: 0 , "; }
+
+					// Name
+					if (person1->GetName() > person2->GetName()) { std::cout << "Name: + , "; }
+					else if (person1->GetName() == person2->GetName()) { std::cout << "Name: 0 , "; }
+					else if (person1->GetName() < person2->GetName()) { std::cout << "Name: - , "; }
+
+					// Dad name
+					if (person1->GetDad_Name() > person2->GetDad_Name()) { std::cout << "Otchestvo: + , "; }
+					else if (person1->GetDad_Name() == person2->GetDad_Name()) { std::cout << "Otchestvo: 0 , "; }
+					else if (person1->GetDad_Name() < person2->GetDad_Name()) { std::cout << "Otchestvo: - , "; }
+
+					//Date
+					int date_1 = person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay();
+					int date_2 = person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay();
+					if (date_1 < date_2) { std::cout << "Date: + , "; }
+					else if (date_1 == date_2) { std::cout << "Date: 0 , "; }
+					else if (date_1 > date_2) { std::cout << "Date: - , "; }
+
+					//Phone
+					if (person1->GetPhone() > person2->GetPhone()) { std::cout << "Phone: +"; }
+					else if (person1->GetPhone() == person2->GetPhone()) { std::cout << "Phone: 0"; }
+					else if (person1->GetPhone() < person2->GetPhone()) { std::cout << "Phone: -"; }
+					std::cout << std::endl;
+				}
+				else {
+					std::cerr << "Wrong indexes" << std::endl;
+				}
+			}
+			else {
+				std::cerr << "Wrong indexes" << std::endl;
+			}
 		}
 		else {
 			std::cerr << "Wrong indexes" << std::endl;
@@ -397,55 +422,66 @@ public:
 	// Checking one Person
 	void check_person() {
 		printList();
-		int i;
 		std::cout << "Choose an index of person to check: ";
-		std::cin >> i; std::cout << std::endl;
-		if (size >= i) {
-			std::string sec_name, name, dad_name, date, phone;
-			Person* p = getByIndex(i);
-			std::cout << "Write FIO, date of birth and phone('*' if no need to check): ";
-			std::cin >> sec_name >> name >> dad_name >> date >> phone; std::cout << std::endl;
-			bool answer = true;
-			if (name != "*") {
-				if (name != p->GetName()) {
-					answer = false;
-				}
-			}
-			else if (sec_name != "*") {
-				if (sec_name != p->GetSec_Name()) {
-					answer = false;
-				}
-			}
-			else if (dad_name != "*") {
-				if (dad_name != p->GetDad_Name()) {
-					answer = false;
-				}
-			}
-			else if (date != "*") {
-				if (date != p->GetDate()) {
-					answer = false;
-				}
-			}
-			else if (phone != "*") {
-				if (phone != p->GetPhone()) {
-					answer = false;
-				}
-			}
-			std::cout << "Answer is " << answer << std::endl;
-			std::string option = " ";
-			while (option != "Y" and option != "N") {
-				std::cout << "Do you want to delete this person? (Y - yes, N - no): ";
-				std::cin >> option; std::cout << std::endl;
-				if (option == "Y") {
-					remove(p);
-					std::cout << "Deleted!" << std::endl;
-				}
-				else if (option == "N") {
-					std::cout << "Not is not, bye!" << std::endl;
+		std::string m = true_int(); std::cout << std::endl;
+		if (m != "er") {
+			int i = std::stoi(m);
+			if (size >= i) {
+				std::string sec_name, name, dad_name, date, phone;
+				Person* p = getByIndex(i);
+				if (p != nullptr) {
+					std::cout << "Write FIO, date of birth and phone('*' if no need to check): ";
+					std::cin >> sec_name >> name >> dad_name >> date >> phone; std::cout << std::endl;
+					bool answer = true;
+					if (name != "*") {
+						if (name != p->GetName()) {
+							answer = false;
+						}
+					}
+					else if (sec_name != "*") {
+						if (sec_name != p->GetSec_Name()) {
+							answer = false;
+						}
+					}
+					else if (dad_name != "*") {
+						if (dad_name != p->GetDad_Name()) {
+							answer = false;
+						}
+					}
+					else if (date != "*") {
+						if (date != p->GetDate()) {
+							answer = false;
+						}
+					}
+					else if (phone != "*") {
+						if (phone != p->GetPhone()) {
+							answer = false;
+						}
+					}
+					std::cout << "Answer is " << answer << std::endl;
+					std::string option = " ";
+					while (option != "Y" and option != "N") {
+						std::cout << "Do you want to delete this person? (Y - yes, N - no): ";
+						std::cin >> option; std::cout << std::endl;
+						if (option == "Y") {
+							remove(p);
+							std::cout << "Deleted!" << std::endl;
+						}
+						else if (option == "N") {
+							std::cout << "Not is not, bye!" << std::endl;
+						}
+						else {
+							std::cout << "Try again :)" << std::endl;
+						}
+					}
 				}
 				else {
-					std::cout << "Try again :)" << std::endl;
+					std::cerr << "Wrong index" << std::endl;
 				}
+
+			}
+			else {
+				std::cerr << "Wrong index" << std::endl;
 			}
 		}
 		else {
@@ -456,33 +492,42 @@ public:
 	// Number of days until birthday one Person
 	void birthday() {
 		printList();
-		int i = 0;
 		std::cout << "Choose an index of person to count days until birthday: ";
-		std::cin >> i; std::cout << std::endl;
-		if (size >= i) {
-			Person* p = getByIndex(i);
-			tm bd = { 0,0,0,
-					p->GetDay(),
-					p->GetMonth() - 1,
-					p->GetYear() - 1900 };
+		std::string m = true_int(); std::cout << std::endl;
+		if (m != "er") {
+			int i = std::stoi(m);
+			if (size >= i) {
+				Person* p = getByIndex(i);
+				if (p != nullptr) {
+					tm bd = { 0,0,0,
+						p->GetDay(),
+						p->GetMonth() - 1,
+						p->GetYear() - 1900 };
 
-			auto now = std::chrono::system_clock::now();
-			time_t now_c = std::chrono::system_clock::to_time_t(now);
-			tm* current = localtime(&now_c);
+					auto now = std::chrono::system_clock::now();
+					time_t now_c = std::chrono::system_clock::to_time_t(now);
+					tm* current = localtime(&now_c);
 
-			bd.tm_year = current->tm_year;
+					bd.tm_year = current->tm_year;
 
-			if (mktime(&bd) < mktime(current)) { bd.tm_year++; }
-			std::chrono::system_clock::time_point birthday_time = std::chrono::system_clock::from_time_t(std::mktime(&bd));
-			std::chrono::duration<double> diff = birthday_time - now;
+					if (mktime(&bd) < mktime(current)) { bd.tm_year++; }
+					std::chrono::system_clock::time_point birthday_time = std::chrono::system_clock::from_time_t(std::mktime(&bd));
+					std::chrono::duration<double> diff = birthday_time - now;
 
-			int days = static_cast<int>(diff.count() / (60 * 60 * 24)) + 1;
+					int days = static_cast<int>(diff.count() / (60 * 60 * 24)) + 1;
 
-			std::cout << "Day(s) until birthday: " << days << std::endl;
+					std::cout << "Day(s) until birthday: " << days << std::endl;
+				}
+				else {
+					std::cout << "Wrong index" << std::endl;
+				}
+			}
+			else {
+				std::cout << "Wrong index" << std::endl;
+			}
 		}
 		else {
 			std::cout << "Wrong index" << std::endl;
-			birthday();
 		}
 	}
 
