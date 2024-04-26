@@ -564,9 +564,30 @@ public:
 		outFile.close();
 	}
 
-	// Check by last name
-	bool comparePersonsByLastName(Person* person1, Person* person2) {
-		return person1->GetSec_Name() > person2->GetSec_Name();
+	// Sorting flag
+	std::string sort_per(Person* person1, Person* person2) {
+		std::string ans = "";
+		if (person1->GetSec_Name() == person2->GetSec_Name()) { ans += "2"; }
+		else if (person1->GetSec_Name() >= person2->GetSec_Name()) { ans += "1"; }
+		else { ans += "0"; }
+
+		if (person1->GetName() == person2->GetName()) { ans += "2"; }
+		else if (person1->GetName() >= person2->GetName()) { ans += "1"; }
+		else { ans += "0"; }
+
+		if (person1->GetDad_Name() == person2->GetDad_Name()) { ans += "2"; }
+		else if (person1->GetDad_Name() >= person2->GetDad_Name()) { ans += "1"; }
+		else { ans += "0"; }
+
+		if (person1->GetDate() == person2->GetDate()) { ans += "2"; }
+		else if ((person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay()) >= (person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay())) { ans += "1"; }
+		else { ans += "0"; }
+
+		if (person1->GetPhone() == person2->GetPhone()) { ans += "2"; }
+		else if (person1->GetPhone() >= person2->GetPhone()) { ans += "1"; }
+		else { ans += "0"; }
+
+		return ans;
 	}
 
 	// List bubble sort
@@ -582,7 +603,19 @@ public:
 			swapped = false;
 			Node* current = head;
 			while (current->next != last) {
-				if (comparePersonsByLastName(current->data, current->next->data)) {
+				bool f = false;
+				std::string ans = sort_per(current->data, current->next->data);
+				for (auto c : ans) {
+					if (c == '1') {
+						f = true;
+						break;
+					}
+					else if (c == '0') {
+						f = false;
+						break;
+					}
+				}
+				if (f) {
 					// If the current element is larger than the next one, swap them
 					Person* temp = current->data;
 					current->data = current->next->data;
