@@ -183,6 +183,9 @@ public:
 				}
 			}
 		}
+		else {
+			return false;
+		}
 	}
 
 	// Existence date check
@@ -206,7 +209,6 @@ public:
 		}
 	}
 
-	
 };
 
 class Node {
@@ -366,168 +368,154 @@ public:
 	}
 
 	// Comparison of two Persons
-	void compare(List& list) {
-		printList();
-		std::cout << "Write 2 index of people to compare: ";
-		std::string m = true_int(); std::string n = true_int(); std::cout << std::endl;
-		if (m != "er" and n != "er") {
-			int i1 = std::stoi(m);
-			int i2 = std::stoi(n);
-			if (size >= i1 and size >= i2) {
-				Person* person1 = getByIndex(i1);
-				Person* person2 = getByIndex(i2);
-				if (person1 != nullptr and person2 != nullptr) {
-					// Surname
-					if (person1->GetSec_Name() > person2->GetSec_Name()) { std::cout << "Surname: + , "; }
-					else if (person1->GetSec_Name() < person2->GetSec_Name()) { std::cout << "Surname: - , "; }
-					else if (person1->GetSec_Name() == person2->GetSec_Name()) { std::cout << "Surname: 0 , "; }
+	bool compare(Person* person1, Person* person2) {
+		std::string ans = "";
+		// Surname
+		if (person1->GetSec_Name() > person2->GetSec_Name()) { ans += "1"; }
+		else if (person1->GetSec_Name() < person2->GetSec_Name()) { ans += "0"; }
+		else if (person1->GetSec_Name() == person2->GetSec_Name()) { ans += "2"; }
 
-					// Name
-					if (person1->GetName() > person2->GetName()) { std::cout << "Name: + , "; }
-					else if (person1->GetName() == person2->GetName()) { std::cout << "Name: 0 , "; }
-					else if (person1->GetName() < person2->GetName()) { std::cout << "Name: - , "; }
+		// Name
+		if (person1->GetName() > person2->GetName()) { ans += "1"; }
+		else if (person1->GetName() == person2->GetName()) { ans += "0"; }
+		else if (person1->GetName() < person2->GetName()) { ans += "2"; }
 
-					// Dad name
-					if (person1->GetDad_Name() > person2->GetDad_Name()) { std::cout << "Otchestvo: + , "; }
-					else if (person1->GetDad_Name() == person2->GetDad_Name()) { std::cout << "Otchestvo: 0 , "; }
-					else if (person1->GetDad_Name() < person2->GetDad_Name()) { std::cout << "Otchestvo: - , "; }
+		// Dad name
+		if (person1->GetDad_Name() > person2->GetDad_Name()) { ans += "1"; }
+		else if (person1->GetDad_Name() == person2->GetDad_Name()) { ans += "0"; }
+		else if (person1->GetDad_Name() < person2->GetDad_Name()) { ans += "2"; }
 
-					//Date
-					int date_1 = person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay();
-					int date_2 = person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay();
-					if (date_1 < date_2) { std::cout << "Date: + , "; }
-					else if (date_1 == date_2) { std::cout << "Date: 0 , "; }
-					else if (date_1 > date_2) { std::cout << "Date: - , "; }
+		//Date
+		int date_1 = person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay();
+		int date_2 = person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay();
+		if (date_1 < date_2) { ans += "1"; }
+		else if (date_1 == date_2) { ans += "0"; }
+		else if (date_1 > date_2) { ans += "2"; }
 
-					//Phone
-					if (person1->GetPhone() > person2->GetPhone()) { std::cout << "Phone: +"; }
-					else if (person1->GetPhone() == person2->GetPhone()) { std::cout << "Phone: 0"; }
-					else if (person1->GetPhone() < person2->GetPhone()) { std::cout << "Phone: -"; }
-					std::cout << std::endl;
-				}
-				else {
-					std::cerr << "Wrong indexes" << std::endl;
-				}
+		//Phone
+		if (person1->GetPhone() > person2->GetPhone()) { ans += "1"; }
+		else if (person1->GetPhone() == person2->GetPhone()) { ans += "0"; }
+		else if (person1->GetPhone() < person2->GetPhone()) { ans += "2"; }
+
+		bool f = false;
+		for (auto c : ans) {
+			if (c == '1') {
+				f = true;
+				break;
 			}
-			else {
-				std::cerr << "Wrong indexes" << std::endl;
+			else if (c == '0') {
+				f = false;
+				break;
 			}
 		}
-		else {
-			std::cerr << "Wrong indexes" << std::endl;
-		}
+		return f;
 	}
 
 	// Checking one Person
-	void check_person() {
-		printList();
-		std::cout << "Choose an index of person to check: ";
-		std::string m = true_int(); std::cout << std::endl;
-		if (m != "er") {
-			int i = std::stoi(m);
-			if (size >= i) {
-				std::string sec_name, name, dad_name, date, phone;
-				Person* p = getByIndex(i);
-				if (p != nullptr) {
-					std::cout << "Write FIO, date of birth and phone('*' if no need to check): ";
-					std::cin >> sec_name >> name >> dad_name >> date >> phone; std::cout << std::endl;
-					bool answer = true;
-					if (name != "*") {
-						if (name != p->GetName()) {
-							answer = false;
-						}
-					}
-					else if (sec_name != "*") {
-						if (sec_name != p->GetSec_Name()) {
-							answer = false;
-						}
-					}
-					else if (dad_name != "*") {
-						if (dad_name != p->GetDad_Name()) {
-							answer = false;
-						}
-					}
-					else if (date != "*") {
-						if (date != p->GetDate()) {
-							answer = false;
-						}
-					}
-					else if (phone != "*") {
-						if (phone != p->GetPhone()) {
-							answer = false;
-						}
-					}
-					std::cout << "Answer is " << answer << std::endl;
-					std::string option = " ";
-					while (option != "Y" and option != "N") {
-						std::cout << "Do you want to delete this person? (Y - yes, N - no): ";
-						std::cin >> option; std::cout << std::endl;
-						if (option == "Y") {
-							remove(p);
-							std::cout << "Deleted!" << std::endl;
-						}
-						else if (option == "N") {
-							std::cout << "Not is not, bye!" << std::endl;
-						}
-						else {
-							std::cout << "Try again :)" << std::endl;
-						}
-					}
+	void check_person(List& list, bool del) {
+		std::vector <Node*> for_del;
+		std::string sec_name, name, dad_name, date, phone;
+		std::cout << "Write FIO, date of birth and phone('*' if no need to check): ";
+		std::cin >> sec_name >> name >> dad_name >> date >> phone; std::cout << std::endl;
+		Node* current = head;
+		while (current) {
+			bool answer = false;
+			if (sec_name != "*") {
+				if (sec_name == current->data->GetSec_Name()) {
+					answer = true;
 				}
 				else {
-					std::cerr << "Wrong index" << std::endl;
+					answer = false;
 				}
-
 			}
-			else {
-				std::cerr << "Wrong index" << std::endl;
+			else if (name != "*") {
+				if (name == current->data->GetName()) {
+					answer = true;
+				}
+				else {
+					answer = false;
+				}
+			}
+			else if (dad_name != "*") {
+				if (dad_name == current->data->GetDad_Name()) {
+					answer = true;
+				}
+				else {
+					answer = false;
+				}
+			}
+			else if (date == "*") {
+				if (date == current->data->GetDate()) {
+					answer = true;
+				}
+				else {
+					answer = false;
+				}
+			}
+			else if (phone == "*") {
+				if (phone == current->data->GetPhone()) {
+					answer = true;
+				}
+				else {
+					answer = false;
+				}
+			}
+			if (answer == true or (phone == "*" and date == "*" and sec_name == "*" and name == "*" and dad_name == "*")) {
+				for_del.push_back(current);
+			}
+			current = current->next;
+		}
+		if (not del) {
+			for (int i = 0; i < for_del.size(); i++) {
+				std::cout << i + 1 << ". ";
+				std::cout << "Name: " << for_del[i]->data->GetSec_Name() << " " << for_del[i]->data->GetName() << " " << for_del[i]->data->GetDad_Name() << ", ";
+				std::cout << "Date of Birth: " << for_del[i]->data->GetDate() << ", ";
+				std::cout << "Phone Number: " << for_del[i]->data->GetPhone() << std::endl;
 			}
 		}
 		else {
-			std::cerr << "Wrong index" << std::endl;
+			for (int i = 0; i < for_del.size(); i++) {
+				remove(for_del[i]->data);
+			}
 		}
 	}
 
-	// Number of days until birthday one Person
-	void birthday() {
-		printList();
-		std::cout << "Choose an index of person to count days until birthday: ";
-		std::string m = true_int(); std::cout << std::endl;
-		if (m != "er") {
-			int i = std::stoi(m);
-			if (size >= i) {
-				Person* p = getByIndex(i);
-				if (p != nullptr) {
-					tm bd = { 0,0,0,
-						p->GetDay(),
-						p->GetMonth() - 1,
-						p->GetYear() - 1900 };
+	// Person with the closest birthday
+	void close_bd() {
+		std::vector <Node*> ind;
+		Node* current = head;
+		int max_d = 366;
+		Node* close = nullptr;
 
-					auto now = std::chrono::system_clock::now();
-					time_t now_c = std::chrono::system_clock::to_time_t(now);
-					tm* current = localtime(&now_c);
+		while (current) {
+			tm bd = { 0,0,0,
+						current->data->GetDay(),
+						current->data->GetMonth() - 1,
+						current->data->GetYear() - 1900 };
 
-					bd.tm_year = current->tm_year;
-
-					if (mktime(&bd) < mktime(current)) { bd.tm_year++; }
-					std::chrono::system_clock::time_point birthday_time = std::chrono::system_clock::from_time_t(std::mktime(&bd));
-					std::chrono::duration<double> diff = birthday_time - now;
-
-					int days = static_cast<int>(diff.count() / (60 * 60 * 24)) + 1;
-
-					std::cout << "Day(s) until birthday: " << days << std::endl;
-				}
-				else {
-					std::cout << "Wrong index" << std::endl;
-				}
+			auto now = std::chrono::system_clock::now();
+			time_t now_c = std::chrono::system_clock::to_time_t(now);
+			tm* local = localtime(&now_c);
+			bd.tm_year = local->tm_year;
+			if (mktime(&bd) < mktime(local)) { bd.tm_year++; }
+			std::chrono::system_clock::time_point birthday_time = std::chrono::system_clock::from_time_t(std::mktime(&bd));
+			std::chrono::duration<double> diff = birthday_time - now;
+			int days = static_cast<int>(diff.count() / (60 * 60 * 24)) + 1;
+			if (days < max_d) {
+				max_d = days;
+				close = current;
 			}
-			else {
-				std::cout << "Wrong index" << std::endl;
-			}
+			current = current->next;
+		}
+		if (close != nullptr) {
+			std::cout << "Name: " << close->data->GetSec_Name() << " " << close->data->GetName() << " " << close->data->GetDad_Name() << ", ";
+			std::cout << "Date of Birth: " << close->data->GetDate() << ", ";
+			std::cout << "Phone Number: " << close->data->GetPhone() << ", Days: " << max_d << std::endl;
 		}
 		else {
-			std::cout << "Wrong index" << std::endl;
+			return;
 		}
+		
 	}
 
 	// Clearing List
@@ -564,57 +552,19 @@ public:
 		outFile.close();
 	}
 
-	// Sorting flag
-	std::string sort_per(Person* person1, Person* person2) {
-		std::string ans = "";
-		if (person1->GetSec_Name() == person2->GetSec_Name()) { ans += "2"; }
-		else if (person1->GetSec_Name() >= person2->GetSec_Name()) { ans += "1"; }
-		else { ans += "0"; }
-
-		if (person1->GetName() == person2->GetName()) { ans += "2"; }
-		else if (person1->GetName() >= person2->GetName()) { ans += "1"; }
-		else { ans += "0"; }
-
-		if (person1->GetDad_Name() == person2->GetDad_Name()) { ans += "2"; }
-		else if (person1->GetDad_Name() >= person2->GetDad_Name()) { ans += "1"; }
-		else { ans += "0"; }
-
-		if (person1->GetDate() == person2->GetDate()) { ans += "2"; }
-		else if ((person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay()) >= (person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay())) { ans += "1"; }
-		else { ans += "0"; }
-
-		if (person1->GetPhone() == person2->GetPhone()) { ans += "2"; }
-		else if (person1->GetPhone() >= person2->GetPhone()) { ans += "1"; }
-		else { ans += "0"; }
-
-		return ans;
-	}
-
 	// List bubble sort
 	void bubbleSort() {
 		if (!head || !head->next) {
 			// If the list is empty or contains only one element, then it is already sorted
 			return;
 		}
-
 		bool swapped;
 		Node* last = nullptr;
 		do {
 			swapped = false;
 			Node* current = head;
 			while (current->next != last) {
-				bool f = false;
-				std::string ans = sort_per(current->data, current->next->data);
-				for (auto c : ans) {
-					if (c == '1') {
-						f = true;
-						break;
-					}
-					else if (c == '0') {
-						f = false;
-						break;
-					}
-				}
+				bool f = compare(current->data, current->next->data);
 				if (f) {
 					// If the current element is larger than the next one, swap them
 					Person* temp = current->data;

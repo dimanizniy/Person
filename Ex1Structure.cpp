@@ -16,10 +16,10 @@ int main() {
 
 	std::cout << "1 - Adding from keyboard" << std::endl;
 	std::cout << "2 - Adding from file" << std::endl;
-	std::cout << "3 - Compare two people" << std::endl;
-	std::cout << "4 - Output" << std::endl;
-	std::cout << "5 - Check one person" << std::endl;
-	std::cout << "6 - Days until birthday" << std::endl;
+	std::cout << "3 - Output" << std::endl;
+	std::cout << "4 - Check one person to print" << std::endl;
+	std::cout << "5 - Check one person to delete" << std::endl;
+	std::cout << "6 - Close birthday" << std::endl;
 	std::cout << "7 - Export the database to the file" << std::endl;
 	std::cout << "8 - Sort the database" << std::endl;
 	std::cout << "-1 - Clear the database" << std::endl;
@@ -48,16 +48,16 @@ int main() {
 			list.addFromFile(adress);
 		}
 		else if (flag == "3") {
-			list.compare(list);
-		}
-		else if (flag == "4") {
 			list.printList();
 		}
+		else if (flag == "4") {
+			list.check_person(list, false);
+		}
 		else if (flag == "5") {
-			list.check_person();
+			list.check_person(list, true);
 		}
 		else if (flag == "6") {
-			list.birthday();
+			list.close_bd();
 		}
 		else if (flag == "7") {
 			list.writeToFile("output.txt");
