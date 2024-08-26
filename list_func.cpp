@@ -1,0 +1,369 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream>
+#include "person.h"
+#include <vector>
+
+using namespace std;
+
+List::List() : head(nullptr), tail(nullptr), size(0) {}
+
+// Checking an integer
+std::string List::true_int() {
+	int i;
+	if ((std::cin >> i).good()) {
+		return std::to_string(i);
+	}
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore();
+		return "er";
+	}
+	else {
+		return "er";
+	}
+}
+
+// Get Person by index
+Person* List::getByIndex(int index) {
+	Node* current = head;
+	int currentIndex = 1;
+	while (current && currentIndex < index) {
+		current = current->next;
+		currentIndex++;
+	}
+	if (current && currentIndex == index) {
+		return current->data;
+	}
+	return nullptr;
+}
+
+// Adding a person
+void List::append(Person* p) {
+	std::string res = p->check_input();
+	if (res == "0") {
+		std::vector <int> full_date = p->add_date();
+		if (!full_date.empty() and full_date.size() == 3) {
+			p->set_date(full_date);
+			bool f = p->right_date();
+			if (f) {
+				Node* newNode = new Node(p);
+				if (!head)
+				{
+					head = tail = newNode;
+				}
+				else
+				{
+					tail->next = newNode;
+					newNode->prev = tail;
+					tail = newNode;
+				}
+				size++;
+			}
+			else
+			{
+				std::cerr << "Error in date" << std::endl;
+			}
+		}
+		else {
+			std::cerr << "Error in date" << std::endl;
+		}
+	}
+	else {
+		std::cout << res << std::endl;
+	}
+}
+
+// Removing a person
+void List::remove(Person* p) {
+	Node* current = head;
+	while (current) {
+		if (current->data == p) {
+			if (current == head && current == tail) {
+				head = tail = nullptr;
+			}
+			else if (current == head) {
+				head = head->next;
+				head->prev = nullptr;
+			}
+			else if (current == tail) {
+				tail = tail->prev;
+				tail->next = nullptr;
+			}
+			else {
+				current->prev->next = current->next;
+				current->next->prev = current->prev;
+			}
+			delete current;
+			return;
+		}
+		current = current->next;
+	}
+}
+
+// List Output
+void List::printList() {
+	Node* current = head;
+	int index = 1;
+	while (current) {
+		std::cout << index << ". ";
+		std::cout << "Name: " << current->data->GetSec_Name() << " " << current->data->GetName() << " " << current->data->GetDad_Name() << ", ";
+		std::cout << "Date of Birth: " << current->data->GetDate() << ", ";
+		std::cout << "Phone Number: " << current->data->GetPhone() << std::endl;
+		current = current->next;
+		index++;
+	}
+}
+
+// Adding all Persons from a file
+void List::addFromFile(const std::string& filename) {
+	std::string name, sec_name, dad_name, date, phone;
+	std::ifstream file(filename);
+	if (!file.is_open()) {
+		std::cerr << "Failed to open file: " << filename << std::endl;
+		return;
+	}
+
+	while (file >> sec_name >> name >> dad_name >> date >> phone) {
+		Person* p = new Person(sec_name, name, dad_name, date, phone);
+		std::string res = p->check_input();
+		if (res == "0") {
+			std::vector <int> full_date = p->add_date();
+			p->set_date(full_date);
+			bool f = p->right_date();
+			if (f) {
+				append(p);
+			}
+			else {
+				std::cerr << "Error in date" << std::endl;
+			}
+		}
+		else {
+			std::cout << res << std::endl;
+		}
+	}
+
+	file.close();
+}
+
+// Comparison of two Persons
+bool List::compare(Person* person1, Person* person2) {
+	std::string ans = "";
+	// Surname
+	if (person1->GetSec_Name() > person2->GetSec_Name()) { ans += "1"; }
+	else if (person1->GetSec_Name() < person2->GetSec_Name()) { ans += "0"; }
+	else if (person1->GetSec_Name() == person2->GetSec_Name()) { ans += "2"; }
+
+	// Name
+	if (person1->GetName() > person2->GetName()) { ans += "1"; }
+	else if (person1->GetName() == person2->GetName()) { ans += "0"; }
+	else if (person1->GetName() < person2->GetName()) { ans += "2"; }
+
+	// Dad name
+	if (person1->GetDad_Name() > person2->GetDad_Name()) { ans += "1"; }
+	else if (person1->GetDad_Name() == person2->GetDad_Name()) { ans += "0"; }
+	else if (person1->GetDad_Name() < person2->GetDad_Name()) { ans += "2"; }
+
+	//Date
+	int date_1 = person1->GetYear() * 10000 + person1->GetMonth() * 100 + person1->GetDay();
+	int date_2 = person2->GetYear() * 10000 + person2->GetMonth() * 100 + person2->GetDay();
+	if (date_1 < date_2) { ans += "1"; }
+	else if (date_1 == date_2) { ans += "0"; }
+	else if (date_1 > date_2) { ans += "2"; }
+
+	//Phone
+	if (person1->GetPhone() > person2->GetPhone()) { ans += "1"; }
+	else if (person1->GetPhone() == person2->GetPhone()) { ans += "0"; }
+	else if (person1->GetPhone() < person2->GetPhone()) { ans += "2"; }
+
+	bool f = false;
+	for (auto c : ans) {
+		if (c == '1') {
+			f = true;
+			break;
+		}
+		else if (c == '0') {
+			f = false;
+			break;
+		}
+	}
+	return f;
+}
+
+// Checking one Person
+void List::check_person(List& list, bool del) {
+	std::vector <Node*> for_del;
+	std::string sec_name, name, dad_name, date, phone;
+	std::cout << "Write FIO, date of birth and phone('*' if no need to check): ";
+	std::cin >> sec_name >> name >> dad_name >> date >> phone; std::cout << std::endl;
+	Node* current = head;
+	while (current) {
+		bool answer = false;
+		if (sec_name != "*") {
+			if (sec_name == current->data->GetSec_Name()) {
+				answer = true;
+			}
+			else {
+				answer = false;
+			}
+		}
+		else if (name != "*") {
+			if (name == current->data->GetName()) {
+				answer = true;
+			}
+			else {
+				answer = false;
+			}
+		}
+		else if (dad_name != "*") {
+			if (dad_name == current->data->GetDad_Name()) {
+				answer = true;
+			}
+			else {
+				answer = false;
+			}
+		}
+		else if (date == "*") {
+			if (date == current->data->GetDate()) {
+				answer = true;
+			}
+			else {
+				answer = false;
+			}
+		}
+		else if (phone == "*") {
+			if (phone == current->data->GetPhone()) {
+				answer = true;
+			}
+			else {
+				answer = false;
+			}
+		}
+		if (answer == true or (phone == "*" and date == "*" and sec_name == "*" and name == "*" and dad_name == "*")) {
+			for_del.push_back(current);
+		}
+		current = current->next;
+	}
+	if (not del) {
+		for (int i = 0; i < for_del.size(); i++) {
+			std::cout << i + 1 << ". ";
+			std::cout << "Name: " << for_del[i]->data->GetSec_Name() << " " << for_del[i]->data->GetName() << " " << for_del[i]->data->GetDad_Name() << ", ";
+			std::cout << "Date of Birth: " << for_del[i]->data->GetDate() << ", ";
+			std::cout << "Phone Number: " << for_del[i]->data->GetPhone() << std::endl;
+		}
+	}
+	else {
+		for (int i = 0; i < for_del.size(); i++) {
+			remove(for_del[i]->data);
+		}
+	}
+}
+
+// Person with the closest birthday
+void List::close_bd() {
+	std::vector <Node*> ind;
+	Node* current = head;
+	int max_d = 366;
+	Node* close = nullptr;
+
+	while (current) {
+		tm bd = { 0,0,0,
+					current->data->GetDay(),
+					current->data->GetMonth() - 1,
+					current->data->GetYear() - 1900 };
+
+		auto now = std::chrono::system_clock::now();
+		time_t now_c = std::chrono::system_clock::to_time_t(now);
+		tm* local = localtime(&now_c);
+		bd.tm_year = local->tm_year;
+		if (mktime(&bd) < mktime(local)) { bd.tm_year++; }
+		std::chrono::system_clock::time_point birthday_time = std::chrono::system_clock::from_time_t(std::mktime(&bd));
+		std::chrono::duration<double> diff = birthday_time - now;
+		int days = static_cast<int>(diff.count() / (60 * 60 * 24)) + 1;
+		if (days < max_d) {
+			max_d = days;
+			close = current;
+		}
+		current = current->next;
+	}
+	if (close != nullptr) {
+		std::cout << "Name: " << close->data->GetSec_Name() << " " << close->data->GetName() << " " << close->data->GetDad_Name() << ", ";
+		std::cout << "Date of Birth: " << close->data->GetDate() << ", ";
+		std::cout << "Phone Number: " << close->data->GetPhone() << ", Days: " << max_d << std::endl;
+	}
+	else {
+		return;
+	}
+
+}
+
+// Clearing List
+void List::clearList() {
+	Node* current = head;
+	while (current) {
+		Node* next = current->next;
+		delete current->data; // Deleting the Person object stored in the node
+		delete current; // Delete the node itself
+		current = next;
+	}
+	head = tail = nullptr; // The head and tail pointers point to nullptr, i.e. the list is empty
+	size = 0; // Resetting the list size to zero
+}
+
+// Export List to file "output.txt"
+void List::writeToFile(const std::string& filename) {
+	std::ofstream outFile(filename);
+	if (!outFile.is_open()) {
+		std::cerr << "Failed to open file: " << filename << std::endl;
+		return;
+	}
+
+	Node* current = head;
+	while (current) {
+		outFile << current->data->GetSec_Name() << " "
+			<< current->data->GetName() << " "
+			<< current->data->GetDad_Name() << " "
+			<< current->data->GetDate() << " "
+			<< current->data->GetPhone() << std::endl;
+		current = current->next;
+	}
+
+	outFile.close();
+}
+
+// List bubble sort
+void List::bubbleSort() {
+	if (!head || !head->next) {
+		// If the list is empty or contains only one element, then it is already sorted
+		return;
+	}
+	bool swapped;
+	Node* last = nullptr;
+	do {
+		swapped = false;
+		Node* current = head;
+		while (current->next != last) {
+			bool f = compare(current->data, current->next->data);
+			if (f) {
+				// If the current element is larger than the next one, swap them
+				Person* temp = current->data;
+				current->data = current->next->data;
+				current->next->data = temp;
+				swapped = true;
+			}
+			current = current->next;
+		}
+		last = current;
+	} while (swapped);
+}
+
+// Destructor
+List::~List() {
+	Node* current = head;
+	while (current) {
+		Node* next = current->next;
+		delete current->data;
+		delete current;
+		current = next;
+	}
+}

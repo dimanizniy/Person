@@ -129,6 +129,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ex1Structure.cpp" />
+    <ClCompile Include="list_func.cpp" />
+    <ClCompile Include="person_func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="person.h" />
